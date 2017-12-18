@@ -12,4 +12,8 @@
     <OutputPath>..\Release\</OutputPath>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AJ.Std.Collections.Contracts\AJ.Std.Collections.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>

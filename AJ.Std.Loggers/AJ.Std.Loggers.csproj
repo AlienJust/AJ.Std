@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AJ.Std.Loggers.Contracts\AJ.Std.Loggers.Contracts.csproj" />
+    <ProjectReference Include="..\AJ.Std.Text.Contracts\AJ.Std.Text.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>
