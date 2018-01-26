@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AJ.Std.Reflection", "AJ.Std.Reflection\AJ.Std.Reflection.csproj", "{B0842A7B-3BB1-4029-BA4D-46FEF2ABC859}"
 EndProject
@@ -11,25 +11,29 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AJ.Std.Collections", "AJ.St
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AJ.Std.Composition.Contracts", "AJ.Std.Composition.Contracts\AJ.Std.Composition.Contracts.csproj", "{4E199A31-235B-4E1D-9281-C934AD9324E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AJ.Std.Composition", "AJ.Std.Composition\AJ.Std.Composition.csproj", "{0E2DC81F-03CA-4A53-B9D6-8CC4B3519E4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AJ.Std.Composition", "AJ.Std.Composition\AJ.Std.Composition.csproj", "{0E2DC81F-03CA-4A53-B9D6-8CC4B3519E4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AJ.Std.Text.Contracts", "AJ.Std.Text.Contracts\AJ.Std.Text.Contracts.csproj", "{44C648D9-3677-4AC9-8E36-89ED40324F08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AJ.Std.Text.Contracts", "AJ.Std.Text.Contracts\AJ.Std.Text.Contracts.csproj", "{44C648D9-3677-4AC9-8E36-89ED40324F08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AJ.Std.Text", "AJ.Std.Text\AJ.Std.Text.csproj", "{6C7826F8-DF0E-4373-B381-58F1B1A7780E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AJ.Std.Text", "AJ.Std.Text\AJ.Std.Text.csproj", "{6C7826F8-DF0E-4373-B381-58F1B1A7780E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AJ.Std.Time", "AJ.Std.Time\AJ.Std.Time.csproj", "{BB6D9F45-20BF-48B2-85FE-7AA15234DFB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AJ.Std.Time", "AJ.Std.Time\AJ.Std.Time.csproj", "{BB6D9F45-20BF-48B2-85FE-7AA15234DFB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AJ.Std.UI.Contracts", "AJ.Std.UI.Contracts\AJ.Std.UI.Contracts.csproj", "{0FF56A8E-C9D8-444A-B243-2C196281D2E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AJ.Std.UI.Contracts", "AJ.Std.UI.Contracts\AJ.Std.UI.Contracts.csproj", "{0FF56A8E-C9D8-444A-B243-2C196281D2E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AJ.Std.Numeric", "AJ.Std.Numeric\AJ.Std.Numeric.csproj", "{D77D187D-4D99-4071-94ED-CF5FC5E7FF52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AJ.Std.Numeric", "AJ.Std.Numeric\AJ.Std.Numeric.csproj", "{D77D187D-4D99-4071-94ED-CF5FC5E7FF52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AJ.Std.Serial", "AJ.Std.Serial\AJ.Std.Serial.csproj", "{ACD221B7-4AB1-4211-A114-F77FE1D6D3A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AJ.Std.Serial", "AJ.Std.Serial\AJ.Std.Serial.csproj", "{ACD221B7-4AB1-4211-A114-F77FE1D6D3A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AJ.Std.Mvvm", "AJ.Std.Mvvm\AJ.Std.Mvvm.csproj", "{652CE825-F020-48D4-8964-CBB8EE168347}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AJ.Std.Mvvm", "AJ.Std.Mvvm\AJ.Std.Mvvm.csproj", "{652CE825-F020-48D4-8964-CBB8EE168347}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AJ.Std.Loggers.Contracts", "AJ.Std.Loggers.Contracts\AJ.Std.Loggers.Contracts.csproj", "{00B563C0-8E1B-4FAD-818F-847E62006640}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AJ.Std.Loggers.Contracts", "AJ.Std.Loggers.Contracts\AJ.Std.Loggers.Contracts.csproj", "{00B563C0-8E1B-4FAD-818F-847E62006640}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AJ.Std.Loggers", "AJ.Std.Loggers\AJ.Std.Loggers.csproj", "{E67E93C6-826E-4098-9BBB-61BC16F69E07}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AJ.Std.Loggers", "AJ.Std.Loggers\AJ.Std.Loggers.csproj", "{E67E93C6-826E-4098-9BBB-61BC16F69E07}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AJ.Std.Concurrent.Contracts", "AJ.Std.Concurrent.Contracts\AJ.Std.Concurrent.Contracts.csproj", "{B3D584D0-6302-48D4-9CC5-5193F3B91FC7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AJ.Std.Concurrent", "AJ.Std.Concurrent\AJ.Std.Concurrent.csproj", "{A4F434FE-F8FD-49CD-9644-E6A53854A3AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +97,14 @@ Global
 		{E67E93C6-826E-4098-9BBB-61BC16F69E07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E67E93C6-826E-4098-9BBB-61BC16F69E07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E67E93C6-826E-4098-9BBB-61BC16F69E07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3D584D0-6302-48D4-9CC5-5193F3B91FC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3D584D0-6302-48D4-9CC5-5193F3B91FC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3D584D0-6302-48D4-9CC5-5193F3B91FC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3D584D0-6302-48D4-9CC5-5193F3B91FC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4F434FE-F8FD-49CD-9644-E6A53854A3AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4F434FE-F8FD-49CD-9644-E6A53854A3AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4F434FE-F8FD-49CD-9644-E6A53854A3AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4F434FE-F8FD-49CD-9644-E6A53854A3AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
