@@ -7,25 +7,20 @@ using System.Threading;
 using AJ.Std.Concurrent.Contracts;
 using AJ.Std.Loggers.Contracts;
 
-namespace AJ.Std.Concurrent
-{
-	public sealed class AddressedConcurrentQueueWithPriority<TKey, TItem>
-	{
+namespace AJ.Std.Concurrent {
+	public sealed class AddressedConcurrentQueueWithPriority<TKey, TItem> {
 		private readonly int _maxPriority;
 		private readonly ConcurrentDictionary<TKey, ConcurrentQueueWithPriority<TItem>> _addressedQueues;
-		public AddressedConcurrentQueueWithPriority(int maxPriority)
-		{
+		public AddressedConcurrentQueueWithPriority(int maxPriority) {
 			_maxPriority = maxPriority;
 			_addressedQueues = new ConcurrentDictionary<TKey, ConcurrentQueueWithPriority<TItem>>();
 		}
 
-		public void Enqueue(TKey key, TItem item, int priority)
-		{
+		public void Enqueue(TKey key, TItem item, int priority) {
 			_addressedQueues.GetOrAdd(key, k => new ConcurrentQueueWithPriority<TItem>(_maxPriority)).Enqueue(item, priority);
 		}
 
-		public TItem Dequeue(TKey key)
-		{
+		public TItem Dequeue(TKey key) {
 			ConcurrentQueueWithPriority<TItem> addrQueue;
 			if (_addressedQueues.TryGetValue(key, out addrQueue)) {
 				return addrQueue.Dequeue();
@@ -34,32 +29,27 @@ namespace AJ.Std.Concurrent
 		}
 	}
 
-	sealed class AddressedItem<TKey, TItem>
-	{
+	sealed class AddressedItem<TKey, TItem> {
 		public TKey Key { get; private set; }
 		public TItem Item { get; private set; }
-		public AddressedItem(TKey key, TItem item)
-		{
+		public AddressedItem(TKey key, TItem item) {
 			Key = key;
 			Item = item;
 		}
 	}
 
-	sealed class AddressedItemGuided<TKey, TItem>
-	{
+	sealed class AddressedItemGuided<TKey, TItem> {
 		public TKey Key { get; private set; }
 		public TItem Item { get; private set; }
 		public Guid Id { get; private set; }
-		public AddressedItemGuided(TKey key, TItem item, Guid id)
-		{
+		public AddressedItemGuided(TKey key, TItem item, Guid id) {
 			Key = key;
 			Item = item;
 			Id = id;
 		}
 	}
 
-	public sealed class BackgroundQueueWorker<TItem> : IWorker<TItem>, IThreadNotifier
-	{
+	public sealed class BackgroundQueueWorker<TItem> : IWorker<TItem>, IThreadNotifier {
 		private readonly object _sync;
 		private readonly ConcurrentQueue<TItem> _items;
 		private readonly Action<TItem> _actionInBackThread;
@@ -70,8 +60,7 @@ namespace AJ.Std.Concurrent
 		private bool _mustBeStopped; // Флаг, подающий фоновому потоку сигнал о необходимости завершения (обращение идет через потокобезопасное свойство MustBeStopped)
 		private readonly ManualResetEvent _endEvent;
 
-		public BackgroundQueueWorker(Action<TItem> actionInBackThread)
-		{
+		public BackgroundQueueWorker(Action<TItem> actionInBackThread) {
 			_sync = new object();
 			_endEvent = new ManualResetEvent(false);
 
@@ -90,8 +79,7 @@ namespace AJ.Std.Concurrent
 		}
 
 
-		public void AddWork(TItem workItem)
-		{
+		public void AddWork(TItem workItem) {
 			if (!MustBeStopped) {
 				_items.Enqueue(workItem);
 				_counter.IncrementCount();
@@ -100,8 +88,7 @@ namespace AJ.Std.Concurrent
 		}
 
 
-		private void WorkingThreadStart(object sender, EventArgs args)
-		{
+		private void WorkingThreadStart(object sender, EventArgs args) {
 			try {
 				while (!MustBeStopped) {
 					// В этом цикле ждем пополнения очереди:
@@ -134,13 +121,11 @@ namespace AJ.Std.Concurrent
 			}
 		}
 
-		public void Notify(Action notifyAction)
-		{
+		public void Notify(Action notifyAction) {
 			_workThread.ReportProgress(0, notifyAction);
 		}
 
-		public void StopSynchronously()
-		{
+		public void StopSynchronously() {
 			if (IsRunning) {
 				MustBeStopped = true;
 				_counter.IncrementCount(); // счетчик очереди сбивается, но это не важно, потому что после этого метода поток уничтожается
@@ -150,8 +135,7 @@ namespace AJ.Std.Concurrent
 			}
 		}
 
-		public bool IsRunning
-		{
+		public bool IsRunning {
 			get {
 				bool result;
 				lock (_sync) {
@@ -167,8 +151,7 @@ namespace AJ.Std.Concurrent
 			}
 		}
 
-		private bool MustBeStopped
-		{
+		private bool MustBeStopped {
 			get {
 				bool result;
 				lock (_sync) {
@@ -185,20 +168,17 @@ namespace AJ.Std.Concurrent
 		}
 	}
 
-	public sealed class ConcurrentQueueWithPriority<TItem>
-	{
+	public sealed class ConcurrentQueueWithPriority<TItem> {
 		private readonly List<ConcurrentQueue<TItem>> _itemsQueues;
 
-		public ConcurrentQueueWithPriority(int maxPriority)
-		{
+		public ConcurrentQueueWithPriority(int maxPriority) {
 			_itemsQueues = new List<ConcurrentQueue<TItem>>();
 			for (int i = 0; i < maxPriority; ++i)
 				_itemsQueues.Add(new ConcurrentQueue<TItem>());
 		}
 
 
-		public void Enqueue(TItem item, int priority)
-		{
+		public void Enqueue(TItem item, int priority) {
 			_itemsQueues[priority].Enqueue(item);
 		}
 
@@ -207,8 +187,7 @@ namespace AJ.Std.Concurrent
 		/// </summary>
 		/// <returns>Взятый из очереди элемент</returns>
 		/// <exception cref="Exception">Исключение, итемов не найдено</exception>
-		public TItem Dequeue()
-		{
+		public TItem Dequeue() {
 			try {
 				return DequeueItemsReqursively(0);
 			}
@@ -218,21 +197,18 @@ namespace AJ.Std.Concurrent
 		}
 
 
-		public bool TryDequeue(out TItem result)
-		{
+		public bool TryDequeue(out TItem result) {
 			return TryDequeueItemsReqursively(out result, 0);
 		}
 
-		public void ClearQueue()
-		{
+		public void ClearQueue() {
 			foreach (var itemsQueue in _itemsQueues) {
 				TItem item;
 				while (itemsQueue.TryDequeue(out item)) { }
 			}
 		}
 
-		private TItem DequeueItemsReqursively(int currentQueueNumber)
-		{
+		private TItem DequeueItemsReqursively(int currentQueueNumber) {
 			//GlobalLogger.Instance.Log("currentQueueNumber=" + currentQueueNumber);
 			int nextQueueNumber = currentQueueNumber + 1;
 			if (currentQueueNumber >= _itemsQueues.Count) throw new Exception("No more queues");
@@ -248,8 +224,7 @@ namespace AJ.Std.Concurrent
 			return DequeueItemsReqursively(nextQueueNumber);
 		}
 
-		private bool TryDequeueItemsReqursively(out TItem result, int currentQueueNumber)
-		{
+		private bool TryDequeueItemsReqursively(out TItem result, int currentQueueNumber) {
 			int nextQueueNumber = currentQueueNumber + 1;
 			if (currentQueueNumber >= _itemsQueues.Count) {
 				result = default(TItem);
@@ -270,8 +245,7 @@ namespace AJ.Std.Concurrent
 	/// </summary>
 	/// <typeparam name="TKey">Тип адреса</typeparam>
 	/// <typeparam name="TItem">Тип элемента</typeparam>
-	public sealed class ConcurrentQueueWithPriorityAndAddressUsageControl<TKey, TItem>
-	{
+	public sealed class ConcurrentQueueWithPriorityAndAddressUsageControl<TKey, TItem> {
 		private readonly object _syncRoot = new object();
 		private readonly List<List<AddressedItem<TKey, TItem>>> _itemCollections;
 		private readonly int _maxParallelUsingItemsCount;
@@ -283,8 +257,7 @@ namespace AJ.Std.Concurrent
 		/// </summary>
 		/// <param name="maxPriority">Максимальный приоритет</param>
 		/// <param name="maxParallelUsingItemsCount">Максимальное количество одновременно разрешенных выборок элементов с одним адресом</param>
-		public ConcurrentQueueWithPriorityAndAddressUsageControl(int maxPriority, int maxParallelUsingItemsCount)
-		{
+		public ConcurrentQueueWithPriorityAndAddressUsageControl(int maxPriority, int maxParallelUsingItemsCount) {
 			_maxParallelUsingItemsCount = maxParallelUsingItemsCount;
 			_itemCollections = new List<List<AddressedItem<TKey, TItem>>>();
 
@@ -300,8 +273,7 @@ namespace AJ.Std.Concurrent
 		/// (после того как число используемых элементов снизится до разрешенного значения, будет разрешена дальнейшая выборка элементов с таким адресом)
 		/// </summary>
 		/// <param name="address">Адрес элемента, который больше не используется</param>
-		public void ReportDecrementItemUsages(TKey address)
-		{
+		public void ReportDecrementItemUsages(TKey address) {
 			_itemCounters.DecrementCount(address);
 		}
 
@@ -311,8 +283,7 @@ namespace AJ.Std.Concurrent
 		/// <param name="key">Адрес элемента (ключ)</param>
 		/// <param name="item">Элемент</param>
 		/// <param name="priority">Приоритет (0 - наивысший приоритет)</param>
-		public void Enqueue(TKey key, TItem item, int priority)
-		{
+		public void Enqueue(TKey key, TItem item, int priority) {
 			lock (_syncRoot) {
 				_itemCollections[priority].Add(new AddressedItem<TKey, TItem>(key, item));
 			}
@@ -323,8 +294,7 @@ namespace AJ.Std.Concurrent
 		/// </summary>
 		/// <returns>Взятый из очереди элемент</returns>
 		/// <exception cref="Exception">Исключение, итемов не найдено</exception>
-		public TItem Dequeue()
-		{
+		public TItem Dequeue() {
 			try {
 				lock (_syncRoot) {
 					return DequeueItemsReqursively(0);
@@ -340,8 +310,7 @@ namespace AJ.Std.Concurrent
 		/// </summary>
 		/// <param name="currentQueueNumber">Номер очереди (приоритет)</param>
 		/// <returns></returns>
-		private TItem DequeueItemsReqursively(int currentQueueNumber)
-		{
+		private TItem DequeueItemsReqursively(int currentQueueNumber) {
 			int nextQueueNumber = currentQueueNumber + 1;
 			if (currentQueueNumber >= _itemCollections.Count) throw new Exception("No more queues");
 
@@ -360,15 +329,13 @@ namespace AJ.Std.Concurrent
 			return DequeueItemsReqursively(nextQueueNumber);
 		}
 
-		public bool TryDequeue(out TItem result)
-		{
+		public bool TryDequeue(out TItem result) {
 			lock (_syncRoot) {
 				return TryDequeueItemsReqursively(out result, 0);
 			}
 		}
 
-		private bool TryDequeueItemsReqursively(out TItem result, int currentQueueNumber)
-		{
+		private bool TryDequeueItemsReqursively(out TItem result, int currentQueueNumber) {
 			int nextQueueNumber = currentQueueNumber + 1;
 			if (currentQueueNumber >= _itemCollections.Count) throw new Exception("No more queues");
 
@@ -394,8 +361,7 @@ namespace AJ.Std.Concurrent
 	/// </summary>
 	/// <typeparam name="TKey">Тип адреса</typeparam>
 	/// <typeparam name="TItem">Тип элемента</typeparam>
-	public sealed class ConcurrentQueueWithPriorityAndAddressUsageControlGuided<TKey, TItem>
-	{
+	public sealed class ConcurrentQueueWithPriorityAndAddressUsageControlGuided<TKey, TItem> {
 		private readonly object _syncRoot = new object();
 		private readonly List<List<AddressedItemGuided<TKey, TItem>>> _itemCollections;
 		private readonly int _maxPriority;
@@ -409,8 +375,7 @@ namespace AJ.Std.Concurrent
 		/// <param name="maxPriority">Максимальный приоритет</param>
 		/// <param name="maxParallelUsingItemsCount">Максимальное количество одновременно разрешенных выборок элементов</param>
 		/// <param name="maxTotalUsingItemsCount">Максимальное общее число выборок элементов</param>
-		public ConcurrentQueueWithPriorityAndAddressUsageControlGuided(int maxPriority, uint maxParallelUsingItemsCount, uint maxTotalUsingItemsCount)
-		{
+		public ConcurrentQueueWithPriorityAndAddressUsageControlGuided(int maxPriority, uint maxParallelUsingItemsCount, uint maxTotalUsingItemsCount) {
 			_maxPriority = maxPriority;
 			_maxParallelUsingItemsCount = maxParallelUsingItemsCount;
 			_maxTotalUsingItemsCount = maxTotalUsingItemsCount;
@@ -423,8 +388,7 @@ namespace AJ.Std.Concurrent
 			_itemsInUseCounters = new WaitableMultiCounter<TKey>();
 		}
 
-		public uint MaxTotalUsingItemsCount
-		{
+		public uint MaxTotalUsingItemsCount {
 			get {
 				lock (_syncRoot)
 					return _maxTotalUsingItemsCount;
@@ -441,8 +405,7 @@ namespace AJ.Std.Concurrent
 		/// (после того как число используемых элементов снизится до разрешенного значения, будет разрешена дальнейшая выборка элементов с таким адресом)
 		/// </summary>
 		/// <param name="address">Адрес элемента, который больше не используется</param>
-		public void ReportDecrementItemUsages(TKey address)
-		{
+		public void ReportDecrementItemUsages(TKey address) {
 			_itemsInUseCounters.DecrementCount(address);
 		}
 
@@ -452,8 +415,7 @@ namespace AJ.Std.Concurrent
 		/// <param name="key">Адрес элемента (ключ)</param>
 		/// <param name="item">Элемент</param>
 		/// <param name="priority">Приоритет (0 - наивысший приоритет)</param>
-		public Guid Enqueue(TKey key, TItem item, int priority)
-		{
+		public Guid Enqueue(TKey key, TItem item, int priority) {
 			if (_maxPriority < priority) throw new Exception("Too low priority, must be in range non negative and less than " + _maxPriority);
 			var guid = Guid.NewGuid();
 			lock (_syncRoot) {
@@ -467,8 +429,7 @@ namespace AJ.Std.Concurrent
 		/// </summary>
 		/// <returns>Взятый из очереди элемент</returns>
 		/// <exception cref="Exception">Исключение, итемов не найдено</exception>
-		public TItem Dequeue()
-		{
+		public TItem Dequeue() {
 			try {
 				TItem result;
 				lock (_syncRoot) {
@@ -481,8 +442,7 @@ namespace AJ.Std.Concurrent
 			}
 		}
 
-		private TItem DequeueItemsCycle()
-		{
+		private TItem DequeueItemsCycle() {
 			// already locked:
 			if (_itemsInUseCounters.TotalCount >= _maxTotalUsingItemsCount) throw new Exception("Cannot get item because max total limit riched");
 
@@ -501,16 +461,14 @@ namespace AJ.Std.Concurrent
 		}
 
 
-		public bool TryDequeue(out TItem result)
-		{
+		public bool TryDequeue(out TItem result) {
 			lock (_syncRoot) {
 				return TryDequeueItemsCycle(out result);
 			}
 		}
 
 
-		private bool TryDequeueItemsCycle(out TItem result)
-		{
+		private bool TryDequeueItemsCycle(out TItem result) {
 			if (_itemsInUseCounters.TotalCount >= _maxTotalUsingItemsCount) {
 				result = default(TItem);
 				return false;
@@ -539,8 +497,7 @@ namespace AJ.Std.Concurrent
 		/// </summary>
 		/// <param name="id">Идентификатор итема</param>
 		/// <returns>Истина, если элемент с таки идентификатором был и был удален :о</returns>
-		public bool RemoveItem(Guid id)
-		{
+		public bool RemoveItem(Guid id) {
 			var result = false;
 			lock (_syncRoot) {
 				List<AddressedItemGuided<TKey, TItem>> foundCollection = null;
@@ -566,23 +523,20 @@ namespace AJ.Std.Concurrent
 		}
 	}
 
-	internal sealed class ItemReleaserRelayWithExecutionCountControl<TKey> : IItemsReleaser<TKey>
-	{
+	internal sealed class ItemReleaserRelayWithExecutionCountControl<TKey> : IItemsReleaser<TKey> {
 		private readonly object _sync;
 
 		private readonly IItemsReleaser<TKey> _originalItemsReleaser;
 		private bool _someItemWasReleased;
 
 
-		public ItemReleaserRelayWithExecutionCountControl(IItemsReleaser<TKey> originalItemsReleaser)
-		{
+		public ItemReleaserRelayWithExecutionCountControl(IItemsReleaser<TKey> originalItemsReleaser) {
 			_sync = new object();
 			_originalItemsReleaser = originalItemsReleaser;
 			_someItemWasReleased = false;
 		}
 
-		public void ReportSomeAddressedItemIsFree(TKey address)
-		{
+		public void ReportSomeAddressedItemIsFree(TKey address) {
 			if (!SomeItemWasReleased) {
 				_originalItemsReleaser.ReportSomeAddressedItemIsFree(address);
 			}
@@ -591,8 +545,7 @@ namespace AJ.Std.Concurrent
 			}
 		}
 
-		public bool SomeItemWasReleased
-		{
+		public bool SomeItemWasReleased {
 			get {
 				bool result;
 				lock (_sync) {
@@ -609,8 +562,7 @@ namespace AJ.Std.Concurrent
 		}
 	}
 
-	public sealed class RelayAsyncWorker : IAsyncWorker
-	{
+	public sealed class RelayAsyncWorker : IAsyncWorker {
 		private readonly Action<IAsyncWorkerProgressHandler> _run;
 		private readonly Action<int> _progress;
 		private readonly BackgroundWorker _worker;
@@ -618,8 +570,7 @@ namespace AJ.Std.Concurrent
 		private readonly Action<Exception> _complete;
 		private readonly IAsyncWorkerProgressHandler _progressChangeHandler;
 
-		public RelayAsyncWorker(Action<IAsyncWorkerProgressHandler> run, Action<int> progress, Action<Exception> complete)
-		{
+		public RelayAsyncWorker(Action<IAsyncWorkerProgressHandler> run, Action<int> progress, Action<Exception> complete) {
 			_wasLaunched = false;
 			_run = run;
 			_progress = progress;
@@ -638,8 +589,7 @@ namespace AJ.Std.Concurrent
 		}
 
 
-		public void Run()
-		{
+		public void Run() {
 			if (_wasLaunched)
 				throw new Exception("Was already launched, this worker is one-time-launch worker");
 			if (_run == null)
@@ -654,24 +604,21 @@ namespace AJ.Std.Concurrent
 		}
 	}
 
-	public sealed class RelayAsyncWorkerProgressHandler : IAsyncWorkerProgressHandler
-	{
+	public sealed class RelayAsyncWorkerProgressHandler : IAsyncWorkerProgressHandler {
 		private readonly Action<int> _progress;
-		public RelayAsyncWorkerProgressHandler(Action<int> progress)
-		{
+		public RelayAsyncWorkerProgressHandler(Action<int> progress) {
 			_progress = progress;
 		}
-		public void NotifyProgrssChanged(int progress)
-		{
+		public void NotifyProgrssChanged(int progress) {
 			_progress?.Invoke(progress);
 		}
 	}
 
 	/// <summary>
-	/// Однопоточный обработчик приоритетно-адресной очереди
+	/// Single threaded worker with priority addressed queue
 	/// </summary>
-	/// <typeparam name="TKey">Тип адресов очереди</typeparam>
-	/// <typeparam name="TItem">Тип элементов очереди</typeparam>
+	/// <typeparam name="TKey">Type of queue addresses</typeparam>
+	/// <typeparam name="TItem">Type of queue items</typeparam>
 	public sealed class SingleThreadedRelayAddressedMultiQueueWorker<TKey, TItem> : IAddressedMultiQueueWorker<TKey, TItem>, IItemsReleaser<TKey>, IStoppableWorker {
 
 		private readonly ConcurrentQueueWithPriorityAndAddressUsageControlGuided<TKey, TItem> _items;
@@ -701,7 +648,7 @@ namespace AJ.Std.Concurrent
 			_syncUserActions = new object();
 
 			_name = name;
-			
+
 			_threadNotifyAboutQueueItemsCountChanged = new AutoResetEvent(false);
 			_items = new ConcurrentQueueWithPriorityAndAddressUsageControlGuided<TKey, TItem>(maxPriority, maxParallelUsingItemsCount, maxTotalOnetimeItemsUsages);
 
@@ -839,10 +786,10 @@ namespace AJ.Std.Concurrent
 	}
 
 	/// <summary>
-	/// Однопоточный обработчик приоритетно-адресной очереди
+	/// Single threaded worker with priority addressed queue without throwing internal exceptions
 	/// </summary>
-	/// <typeparam name="TKey">Тип адресов очереди</typeparam>
-	/// <typeparam name="TItem">Тип элементов очереди</typeparam>
+	/// <typeparam name="TKey">Type of queue addresses</typeparam>
+	/// <typeparam name="TItem">Type of queue items</typeparam>
 	public sealed class SingleThreadedRelayAddressedMultiQueueWorkerExceptionless<TKey, TItem> : IAddressedMultiQueueWorker<TKey, TItem>, IItemsReleaser<TKey>, IStoppableWorker {
 		private readonly ConcurrentQueueWithPriorityAndAddressUsageControlGuided<TKey, TItem> _items;
 
@@ -920,7 +867,7 @@ namespace AJ.Std.Concurrent
 			try {
 				while (true) {
 					bool isItemTaken = _items.TryDequeue(out var item); // выбрасывает исключение, если очередь пуста, и поток переходит к ожиданию сигнала
-																													//var releaser = new ItemReleaserRelayWithExecutionCountControl<TKey>((IItemsReleaser<TKey>) this);
+																															//var releaser = new ItemReleaserRelayWithExecutionCountControl<TKey>((IItemsReleaser<TKey>) this);
 					if (isItemTaken) {
 						try {
 							_relayUserAction(item, (IItemsReleaser<TKey>)this); // TODO: Warning! Если в пользовательсоком действии произойдет ошибка, то счетчик элементов застрянет!
@@ -1280,27 +1227,21 @@ namespace AJ.Std.Concurrent
 		private readonly string _name; // TODO: implement interface INamedObject
 		private readonly Action<TItem> _action;
 		private readonly Thread _workThread;
-		//private readonly WaitableCounter _counter;
 
 		private bool _isRunning;
-		private bool _mustBeStopped; // Флаг, подающий фоновому потоку сигнал о необходимости завершения (обращение идет через потокобезопасное свойство MustBeStopped)
+		private bool _mustBeStopped; // Indicates worker thread to stop work (property MustBeStopped is threadsafe)
 
 		private readonly AutoResetEvent _threadNotifyAboutQueueItemsCountChanged;
 
 		public SingleThreadedRelayQueueWorker(string name, Action<TItem> action, ThreadPriority threadPriority, bool markThreadAsBackground, ApartmentState? apartmentState, ILoggerWithStackTrace debugLogger) {
-			if (action == null) throw new ArgumentNullException(nameof(action));
-			if (debugLogger == null) throw new ArgumentNullException(nameof(debugLogger));
-
 			_syncRunFlags = new object();
 			_syncUserActions = new object();
 
 			_items = new ConcurrentQueue<TItem>();
 			_name = name;
-			_action = action;
-			_debugLogger = debugLogger;
+			_action = action ?? throw new ArgumentNullException(nameof(action));
+			_debugLogger = debugLogger ?? throw new ArgumentNullException(nameof(debugLogger));
 
-
-			//_counter = new WaitableCounter(); // свой счетчик с методами ожидания
 			_threadNotifyAboutQueueItemsCountChanged = new AutoResetEvent(false);
 
 			_isRunning = true;
@@ -1331,38 +1272,37 @@ namespace AJ.Std.Concurrent
 			IsRunning = true;
 			try {
 				while (true) {
-					// в этом цикле опустошаем очередь
-					TItem dequeuedItem;
-					bool shouldProceed = _items.TryDequeue(out dequeuedItem);
+					// dequeue in this cycle
+					bool shouldProceed = _items.TryDequeue(out var dequeuedItem);
 					if (shouldProceed) {
 						try {
-							_debugLogger.Log("Before user action", new StackTrace(Thread.CurrentThread, true));
+							_debugLogger.Log("Before user action", new StackTrace(true));
 							_action(dequeuedItem);
-							_debugLogger.Log("After user action", new StackTrace(Thread.CurrentThread, true));
+							_debugLogger.Log("After user action", new StackTrace(true));
 						}
 						catch (Exception ex) {
-							_debugLogger.Log(ex, new StackTrace(Thread.CurrentThread, true));
+							_debugLogger.Log(ex, new StackTrace(true));
 						}
 					}
 					else {
-						_debugLogger.Log("All actions from queue were executed, waiting for new ones", new StackTrace(Thread.CurrentThread, true));
+						_debugLogger.Log("All actions from queue were executed, waiting for new ones", new StackTrace(true));
 						_threadNotifyAboutQueueItemsCountChanged.WaitOne();
 
 						if (MustBeStopped) throw new Exception("MustBeStopped is true, this is the end of thread");
-						_debugLogger.Log("MustBeStopped was false, so continue dequeueing", new StackTrace(Thread.CurrentThread, true));
+						_debugLogger.Log("MustBeStopped was false, so continue dequeuing", new StackTrace(true));
 
-						_debugLogger.Log("New action was enqueued, or stop is required!", new StackTrace(Thread.CurrentThread, true));
+						_debugLogger.Log("New action was enqueued, or stop is required!", new StackTrace(true));
 					}
 				}
 			}
 			catch (Exception ex) {
-				_debugLogger.Log(ex, new StackTrace(Thread.CurrentThread, true));
+				_debugLogger.Log(ex, new StackTrace(true));
 			}
 			IsRunning = false;
 		}
 
 		public void StopAsync() {
-			_debugLogger.Log("Stop called", new StackTrace(Thread.CurrentThread, true));
+			_debugLogger.Log("Stop called", new StackTrace(true));
 			lock (_syncUserActions) {
 				_mustBeStopped = true;
 				_threadNotifyAboutQueueItemsCountChanged.Set();
@@ -1370,9 +1310,241 @@ namespace AJ.Std.Concurrent
 		}
 
 		public void WaitStopComplete() {
-			_debugLogger.Log("Waiting for thread exit begans...", new StackTrace(Thread.CurrentThread, true));
+			_debugLogger.Log("Waiting for thread exit begins...", new StackTrace(true));
 			while (!_workThread.Join(100)) {
-				_debugLogger.Log("Waiting for thread exit...", new StackTrace(Thread.CurrentThread, true));
+				_debugLogger.Log("Waiting for thread exit...", new StackTrace(true));
+				_threadNotifyAboutQueueItemsCountChanged.Set();
+			}
+			_debugLogger.Log("Waiting for thread exit complete", new StackTrace(true));
+		}
+
+
+		public bool IsRunning {
+			get {
+				bool result;
+				lock (_syncRunFlags) {
+					result = _isRunning;
+				}
+				return result;
+			}
+
+			private set {
+				lock (_syncRunFlags) {
+					_isRunning = value;
+				}
+			}
+		}
+
+		private bool MustBeStopped {
+			get {
+				bool result;
+				lock (_syncRunFlags) {
+					result = _mustBeStopped;
+				}
+				return result;
+			}
+		}
+	}
+
+	public sealed class SingleThreadedRelayQueueWorkerProceedAllItemsBeforeStopNoLog<TItem> : IWorker<TItem>, IStoppableWorker {
+		private readonly object _syncUserActions;
+		private readonly object _syncRunFlags;
+		private readonly ConcurrentQueue<TItem> _items;
+		private readonly string _name; // TODO: implement interface INamedObject
+		private readonly Action<TItem> _action;
+		private readonly Thread _workThread;
+
+		private bool _isRunning;
+		private bool _mustBeStopped;
+
+		private readonly AutoResetEvent _threadNotifyAboutQueueItemsCountChanged;
+
+		public SingleThreadedRelayQueueWorkerProceedAllItemsBeforeStopNoLog(string name, Action<TItem> action, ThreadPriority threadPriority, bool markThreadAsBackground, ApartmentState? apartmentState) {
+			_syncRunFlags = new object();
+			_syncUserActions = new object();
+
+			_items = new ConcurrentQueue<TItem>();
+			_name = name;
+			_action = action ?? throw new ArgumentNullException(nameof(action));
+
+			_threadNotifyAboutQueueItemsCountChanged = new AutoResetEvent(false);
+
+			_isRunning = true;
+			_mustBeStopped = false;
+
+			_workThread = new Thread(WorkingThreadStart) { IsBackground = markThreadAsBackground, Priority = threadPriority, Name = name };
+			if (apartmentState.HasValue) _workThread.SetApartmentState(apartmentState.Value);
+			_workThread.Start();
+		}
+
+		public void AddWork(TItem workItem) {
+			lock (_syncUserActions) {
+				lock (_syncRunFlags) {
+					if (!_mustBeStopped) {
+						_items.Enqueue(workItem);
+						_threadNotifyAboutQueueItemsCountChanged.Set();
+					}
+					else {
+						var ex = new Exception("Cannot handle items any more, worker has been stopped or stopping now");
+						throw ex;
+					}
+				}
+			}
+		}
+
+		private void WorkingThreadStart() {
+			IsRunning = true;
+			try {
+				while (true) {
+					while (_items.TryDequeue(out var dequeuedItem)) {
+						try {
+							_action(dequeuedItem);
+						}
+						catch {
+							continue;
+						}
+					}
+					_threadNotifyAboutQueueItemsCountChanged.WaitOne();
+
+					if (MustBeStopped) throw new Exception("MustBeStopped is true, this is the end of thread");
+				}
+			}
+			catch {
+				IsRunning = false;
+			}
+		}
+
+		public void StopAsync() {
+			lock (_syncUserActions) {
+				_mustBeStopped = true;
+				_threadNotifyAboutQueueItemsCountChanged.Set();
+			}
+		}
+
+		public void WaitStopComplete() {
+			while (!_workThread.Join(100)) {
+				_threadNotifyAboutQueueItemsCountChanged.Set();
+			}
+		}
+
+
+		public bool IsRunning {
+			get {
+				bool result;
+				lock (_syncRunFlags) {
+					result = _isRunning;
+				}
+				return result;
+			}
+
+			private set {
+				lock (_syncRunFlags) {
+					_isRunning = value;
+				}
+			}
+		}
+
+		private bool MustBeStopped {
+			get {
+				bool result;
+				lock (_syncRunFlags) {
+					result = _mustBeStopped;
+				}
+				return result;
+			}
+		}
+	}
+
+	public sealed class SingleThreadedRelayQueueWorkerProceedAllItemsBeforeStop<TItem> : IWorker<TItem>, IStoppableWorker {
+		private readonly ILoggerWithStackTrace _debugLogger;
+		private readonly object _syncUserActions;
+		private readonly object _syncRunFlags;
+		private readonly ConcurrentQueue<TItem> _items;
+		private readonly string _name; // TODO: implement interface INamedObject
+		private readonly Action<TItem> _action;
+		private readonly Thread _workThread;
+
+		private bool _isRunning;
+		private bool _mustBeStopped;
+
+		private readonly AutoResetEvent _threadNotifyAboutQueueItemsCountChanged;
+
+		public SingleThreadedRelayQueueWorkerProceedAllItemsBeforeStop(string name, Action<TItem> action, ThreadPriority threadPriority, bool markThreadAsBackground, ApartmentState? apartmentState, ILoggerWithStackTrace debugLogger) {
+			_syncRunFlags = new object();
+			_syncUserActions = new object();
+
+			_items = new ConcurrentQueue<TItem>();
+			_name = name;
+			_action = action ?? throw new ArgumentNullException(nameof(action));
+			_debugLogger = debugLogger ?? throw new ArgumentNullException(nameof(debugLogger));
+
+			_threadNotifyAboutQueueItemsCountChanged = new AutoResetEvent(false);
+
+			_isRunning = true;
+			_mustBeStopped = false;
+
+			_workThread = new Thread(WorkingThreadStart) { IsBackground = markThreadAsBackground, Priority = threadPriority, Name = name };
+			if (apartmentState.HasValue) _workThread.SetApartmentState(apartmentState.Value);
+			_workThread.Start();
+		}
+
+		public void AddWork(TItem workItem) {
+			lock (_syncUserActions) {
+				lock (_syncRunFlags) {
+					if (!_mustBeStopped) {
+						_items.Enqueue(workItem);
+						_threadNotifyAboutQueueItemsCountChanged.Set();
+					}
+					else {
+						var ex = new Exception("Cannot handle items any more, worker has been stopped or stopping now");
+						_debugLogger.Log(ex, new StackTrace());
+						throw ex;
+					}
+				}
+			}
+		}
+
+		private void WorkingThreadStart() {
+			IsRunning = true;
+			try {
+				while (true) {
+					while (_items.TryDequeue(out var dequeuedItem)) {
+						try {
+							_debugLogger.Log("Before user action", new StackTrace(true));
+							_action(dequeuedItem);
+							_debugLogger.Log("After user action", new StackTrace(true));
+						}
+						catch (Exception ex) {
+							_debugLogger.Log(ex, new StackTrace(true));
+						}
+					}
+					_debugLogger.Log("All actions from queue were executed, waiting for new ones", new StackTrace(true));
+					_threadNotifyAboutQueueItemsCountChanged.WaitOne();
+
+					if (MustBeStopped) throw new Exception("MustBeStopped is true, this is the end of thread");
+					_debugLogger.Log("MustBeStopped was false, so continue dequeuing", new StackTrace(true));
+
+					_debugLogger.Log("New action was enqueued, or stop is required!", new StackTrace(true));
+				}
+			}
+			catch (Exception ex) {
+				_debugLogger.Log(ex, new StackTrace(true));
+			}
+			IsRunning = false;
+		}
+
+		public void StopAsync() {
+			_debugLogger.Log("Stop called", new StackTrace(true));
+			lock (_syncUserActions) {
+				_mustBeStopped = true;
+				_threadNotifyAboutQueueItemsCountChanged.Set();
+			}
+		}
+
+		public void WaitStopComplete() {
+			_debugLogger.Log("Waiting for thread exit begins...", new StackTrace(true));
+			while (!_workThread.Join(100)) {
+				_debugLogger.Log("Waiting for thread exit...", new StackTrace(true));
 				_threadNotifyAboutQueueItemsCountChanged.Set();
 			}
 			_debugLogger.Log("Waiting for thread exit complete", new StackTrace(Thread.CurrentThread, true));
@@ -1403,11 +1575,97 @@ namespace AJ.Std.Concurrent
 				}
 				return result;
 			}
+		}
+	}
 
-			set {
-				lock (_syncRunFlags) {
-					_mustBeStopped = value;
-				}
+	/// <summary>
+	/// Runs async operations in background thread, each action has own priority and key
+	/// and allows to control maximum of operations that runs same time for all keys
+	/// and allows to control maximum of operations that runs same time for one key
+	/// </summary>
+	public sealed class SingleThreadPriorityAddressedAsyncStarter<TAddressKey> : IPriorKeyedAsyncStarter<TAddressKey>, IStoppableWorker {
+		private readonly string _name; // TODO: implement interface INamedObject
+		private readonly ILogger _debugLogger;
+		private readonly bool _isWaitAllTasksCompleteNeededOnStop;
+
+		private readonly WaitableCounter _totalFlowCounter; // counter of running async actions
+		private readonly SingleThreadedRelayAddressedMultiQueueWorker<TAddressKey, Action<IItemsReleaser<TAddressKey>>> _asyncActionQueueWorker;
+
+		public SingleThreadPriorityAddressedAsyncStarter(
+			string name,
+			ThreadPriority threadPriority, bool markThreadAsBackground, ApartmentState? apartmentState, ILogger debugLogger,
+			uint maxTotalFlow, uint maxFlowPerAddress, int priorityGradation, bool isWaitAllTasksCompleteNeededOnStop) {
+			_name = name;
+			_debugLogger = debugLogger ?? throw new ArgumentNullException(nameof(debugLogger));
+			_isWaitAllTasksCompleteNeededOnStop = isWaitAllTasksCompleteNeededOnStop;
+
+			_totalFlowCounter = new WaitableCounter(0);
+			_asyncActionQueueWorker = new SingleThreadedRelayAddressedMultiQueueWorker<TAddressKey, Action<IItemsReleaser<TAddressKey>>>
+				(
+				_name, RunActionWithAsyncTailBack, threadPriority, markThreadAsBackground, apartmentState, debugLogger,
+				priorityGradation,
+				maxFlowPerAddress,
+				maxTotalFlow);
+		}
+
+		/// <summary>
+		/// Runs ending of async operation giving queue items releaser to it
+		/// </summary>
+		/// <param name="asyncOperationBeginAction">Action that runs at the end of async operation</param>
+		/// <param name="itemsReleaser">Items releaser</param>
+		private void RunActionWithAsyncTailBack(Action<IItemsReleaser<TAddressKey>> asyncOperationBeginAction, IItemsReleaser<TAddressKey> itemsReleaser) {
+			try {
+				_totalFlowCounter.IncrementCount();
+				_debugLogger.Log("_totalFlowCounter.Count = " + _totalFlowCounter.Count);
+				asyncOperationBeginAction(itemsReleaser);
+			}
+			catch (Exception ex) {
+				_debugLogger.Log(ex);
+			}
+		}
+
+
+		/// <summary>
+		/// Добавляет асинхронную операцию в очередь на выполнение
+		/// </summary>
+		/// <param name="asyncAction">Действие, которое будет протекать асинхронно</param>
+		/// <param name="priority">Приоритет очереди</param>
+		/// <param name="key">Ключ-адрес</param>
+		/// <returns>Идентификатор задания</returns>
+		public Guid AddWork(Action<Action> asyncAction, int priority, TAddressKey key) {
+			var id = _asyncActionQueueWorker.AddWork
+				(
+					key,
+					itemsReleaser => asyncAction(() => {
+						itemsReleaser.ReportSomeAddressedItemIsFree(key);
+						_totalFlowCounter.DecrementCount();
+						_debugLogger.Log("_totalFlowCounter.Count = " + _totalFlowCounter.Count);
+					}),
+					priority
+				);
+			return id;
+		}
+
+		public bool RemoveExecution(Guid id) {
+			return _asyncActionQueueWorker.RemoveItem(id);
+		}
+
+		public uint MaxTotalFlow {
+			// Thread safity is guaranted by worker
+			get { return _asyncActionQueueWorker.MaxTotalOnetimeItemsUsages; }
+			set { _asyncActionQueueWorker.MaxTotalOnetimeItemsUsages = value; }
+		}
+
+		public void StopAsync() {
+			_asyncActionQueueWorker.StopAsync();
+		}
+
+		public void WaitStopComplete() {
+			_asyncActionQueueWorker.WaitStopComplete();
+			_debugLogger.Log("Background worke has been stopped");
+			if (_isWaitAllTasksCompleteNeededOnStop) {
+				_totalFlowCounter.WaitForCounterChangeWhileNotPredecate(count => count == 0);
+				_debugLogger.Log("Total tasks count is now 0");
 			}
 		}
 	}
