@@ -1626,12 +1626,12 @@ namespace AJ.Std.Concurrent {
 
 
 		/// <summary>
-		/// Добавляет асинхронную операцию в очередь на выполнение
+		/// Adds async operations in queue
 		/// </summary>
-		/// <param name="asyncAction">Действие, которое будет протекать асинхронно</param>
-		/// <param name="priority">Приоритет очереди</param>
-		/// <param name="key">Ключ-адрес</param>
-		/// <returns>Идентификатор задания</returns>
+		/// <param name="asyncAction">Action that runs async</param>
+		/// <param name="priority">Queue priority</param>
+		/// <param name="key">Key-address</param>
+		/// <returns>Id of queue item</returns>
 		public Guid AddWork(Action<Action> asyncAction, int priority, TAddressKey key) {
 			var id = _asyncActionQueueWorker.AddWork
 				(
