@@ -19,10 +19,10 @@ namespace AJ.Std.Concurrent
 		}
 
 		/// <summary>
-		/// Обходит очереди по приоритетам и выбирает элемент с наивысшим приоритетом из имеющихся
+		/// Dequeues item (takes item with higher priority)
 		/// </summary>
-		/// <returns>Взятый из очереди элемент</returns>
-		/// <exception cref="Exception">Исключение, итемов не найдено</exception>
+		/// <returns>Taken item</returns>
+		/// <exception cref="Exception">If no items found</exception>
 		public TItem Dequeue() {
 			try {
 				return DequeueItemsReqursively(0);
@@ -50,8 +50,7 @@ namespace AJ.Std.Concurrent
 			if (currentQueueNumber >= _itemsQueues.Count) throw new Exception("No more queues");
 
 			var items = _itemsQueues[currentQueueNumber];
-			TItem dequeuedItem;
-			if (items.TryDequeue(out dequeuedItem)) {
+			if (items.TryDequeue(out var dequeuedItem)) {
 				//GlobalLogger.Instance.Log("Item found, returning...");
 				return dequeuedItem;
 			}

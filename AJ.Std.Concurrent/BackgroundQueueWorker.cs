@@ -14,7 +14,7 @@ namespace AJ.Std.Concurrent
 		private readonly WaitableCounter _counter;
 
 		private bool _isRunning;
-		private bool _mustBeStopped; // Флаг, подающий фоновому потоку сигнал о необходимости завершения (обращение идет через потокобезопасное свойство MustBeStopped)
+		private bool _mustBeStopped;
 		private readonly ManualResetEvent _endEvent;
 
 		public BackgroundQueueWorker(Action<TItem> actionInBackThread) {
@@ -24,7 +24,7 @@ namespace AJ.Std.Concurrent
 			_items = new ConcurrentQueue<TItem>();
 			_actionInBackThread = actionInBackThread;
 
-			_counter = new WaitableCounter(); // свой счетчик с методами ожидания
+			_counter = new WaitableCounter();
 
 			_isRunning = true;
 			_mustBeStopped = false;
@@ -32,7 +32,7 @@ namespace AJ.Std.Concurrent
 			_workThread = new BackgroundWorker { WorkerReportsProgress = true };
 			_workThread.DoWork += WorkingThreadStart;
 			_workThread.RunWorkerAsync();
-			_workThread.ProgressChanged += (sender, args) => ((Action)args.UserState).Invoke(); // если вылетает исключение - то оно будет в потоке GUI
+			_workThread.ProgressChanged += (sender, args) => ((Action)args.UserState).Invoke(); // if throws it will be in initial thread
 		}
 
 
@@ -48,12 +48,11 @@ namespace AJ.Std.Concurrent
 		private void WorkingThreadStart(object sender, EventArgs args) {
 			try {
 				while (!MustBeStopped) {
-					// В этом цикле ждем пополнения очереди:
+					// Waits for new items
 					_counter.WaitForCounterChangeWhileNotPredecate(count => count > 0);
 					while (true) {
-						// в этом цикле опустошаем очередь
-						TItem dequeuedItem;
-						bool shouldProceed = _items.TryDequeue(out dequeuedItem);
+						// dequeuing queue
+						bool shouldProceed = _items.TryDequeue(out var dequeuedItem);
 						if (!shouldProceed) {
 							break;
 						}
@@ -71,7 +70,7 @@ namespace AJ.Std.Concurrent
 				}
 			}
 			catch {
-				//swallow all exeptions
+				//swallow all exceptions
 			}
 			finally {
 				_endEvent.Set();
@@ -85,8 +84,7 @@ namespace AJ.Std.Concurrent
 		public void StopSynchronously() {
 			if (IsRunning) {
 				MustBeStopped = true;
-				_counter.IncrementCount(); // счетчик очереди сбивается, но это не важно, потому что после этого метода поток уничтожается
-
+				_counter.IncrementCount(); //  _counter.Count is broken, but I don't care cause of thread destroying
 				_endEvent.WaitOne();
 				IsRunning = false;
 			}
