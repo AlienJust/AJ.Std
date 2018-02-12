@@ -54,7 +54,7 @@ namespace AJ.Std.Serial
 					var currentReadedBytesCount = _port.Read(inBytes, totalReadedBytesCount, bytesCount - totalReadedBytesCount);
 					Log("Incoming bytes now are = " + inBytes.ToText());
 					totalReadedBytesCount += currentReadedBytesCount;
-					Log("Total readed bytes count=" + totalReadedBytesCount + ", current readed bytes count=" + currentReadedBytesCount);
+					Log("Total read bytes count=" + totalReadedBytesCount + ", current read bytes count=" + currentReadedBytesCount);
 
 					if (totalReadedBytesCount == inBytes.Length) {
 						Log("Result incoming bytes are = " + inBytes.ToText());

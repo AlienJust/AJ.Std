@@ -6,7 +6,7 @@ using RJCP.IO.Ports;
 namespace AJ.Std.Serial
 {
 	/// <summary>
-	/// Waits for timeout even if data allready readed
+	/// Waits for timeout even if data was already read
 	/// </summary>
 	public sealed class SerialPortExtenderNoLogWaitTimeout : ISerialPortExtender {
 		private readonly SerialPortStream _port;
