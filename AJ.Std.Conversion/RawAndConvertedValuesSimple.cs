@@ -1,4 +1,5 @@
-﻿using AJ.Std.Conversion.Contracts;
+﻿using System;
+using AJ.Std.Conversion.Contracts;
 
 namespace AJ.Std.Conversion
 {
@@ -12,7 +13,12 @@ namespace AJ.Std.Conversion
 		}
 
 		public override string ToString() {
-			return RawValue + " - " + ConvertedValue;
+			try {
+				return RawValue + " - " + ConvertedValue;
+			}
+			catch (Exception e) {
+				return e.ToString();
+			}
 		}
 	}
 }

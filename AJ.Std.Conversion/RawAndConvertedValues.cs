@@ -12,7 +12,12 @@ namespace AJ.Std.Conversion {
 		public TConverted ConvertedValue => _builder.Build(RawValue);
 
 		public override string ToString() {
-			return RawValue + " - " + ConvertedValue;
+			try {
+				return RawValue + " - " + ConvertedValue;
+			}
+			catch (Exception e) {
+				return e.ToString();
+			}
 		}
 	}
 }
