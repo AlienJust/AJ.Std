@@ -1,4 +1,5 @@
-﻿using AJ.Std.Conversion.Contracts;
+﻿using System;
+using AJ.Std.Conversion.Contracts;
 
 namespace AJ.Std.Conversion {
 	public sealed class RawAndConvertedValues<TRaw, TConverted> : IRawAndConvertedValues<TRaw, TConverted> {
