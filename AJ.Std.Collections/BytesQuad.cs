@@ -1,7 +1,6 @@
 ﻿using System;
 
-namespace AJ.Std.Collections
-{
+namespace AJ.Std.Collections {
 	/// <summary>
 	/// Quad of bytes
 	/// </summary>
