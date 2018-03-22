@@ -150,7 +150,7 @@ namespace AJ.Std.Collections {
 		/// </summary>
 		/// <param name="bcdValueHf">BCD value</param>
 		/// <returns>New structure instance</returns>
-		public static BytesQuad FromBcdHighFirst(int bcdValueHf) {
+		public static BytesQuad ToBcdHighFirst(int bcdValueHf) {
 			if (bcdValueHf < 0 || bcdValueHf > 99999999) throw new ArgumentOutOfRangeException(nameof(bcdValueHf), "Must be in range 0-99999999");
 			int bcd = 0;
 			for (int digit = 0; digit < 8; ++digit) {
@@ -166,7 +166,7 @@ namespace AJ.Std.Collections {
 		/// </summary>
 		/// <param name="bcdValueLf">BCD value</param>
 		/// <returns>New structure instance</returns>
-		public static BytesQuad FromBcdLowFirst(int bcdValueLf) {
+		public static BytesQuad ToBcdLowFirst(int bcdValueLf) {
 			if (bcdValueLf < 0 || bcdValueLf > 99999999) throw new ArgumentOutOfRangeException(nameof(bcdValueLf), "Must be in range 0-99999999");
 			int bcd = 0;
 			for (int digit = 0; digit < 8; ++digit) {

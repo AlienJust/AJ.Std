@@ -1,7 +1,6 @@
 ﻿using System;
 
-namespace AJ.Std.Collections
-{
+namespace AJ.Std.Collections {
 	/// <summary>
 	/// Bytes octave
 	/// </summary>
@@ -17,7 +16,7 @@ namespace AJ.Std.Collections
 		public byte Second { get; }
 
 		/// <summary>
-		/// Thidrd byte
+		/// Third byte
 		/// </summary>
 		public byte Third { get; }
 
@@ -114,6 +113,7 @@ namespace AJ.Std.Collections
 			if (BitConverter.IsLittleEndian) {
 				return new[] { eighth, seventh, sixth, fifth, fourth, third, second, first };
 			}
+
 			return new[] { first, second, third, fourth, fifth, sixth, seventh, eighth };
 		}
 
@@ -151,7 +151,7 @@ namespace AJ.Std.Collections
 		/// <summary>
 		/// Returns this structure as long using first byte as low
 		/// </summary>
-		public int LowFirstSignedValue {
+		public long LowFirstSignedValue {
 			get {
 				var tempByteArray = GetArrayForBitConverterAccodringToCurrentArchitectureEndian(Eighth, Seventh, Sixth, Fifth, Fourth, Third, Second, First);
 				return BitConverter.ToInt32(tempByteArray, 0);
@@ -161,12 +161,15 @@ namespace AJ.Std.Collections
 		public override bool Equals(object obj) {
 			return obj is BytesOcta octa && this == octa;
 		}
+
 		public override int GetHashCode() {
 			return First.GetHashCode() ^ Second.GetHashCode();
 		}
+
 		public static bool operator ==(BytesOcta x, BytesOcta y) {
 			return x.First == y.First && x.Second == y.Second && x.Third == y.Third && x.Fourth == y.Fourth && x.Fifth == y.Fifth && x.Sixth == y.Sixth && x.Seventh == y.Seventh && x.Eighth == y.Eighth;
 		}
+
 		public static bool operator !=(BytesOcta x, BytesOcta y) {
 			return !(x == y);
 		}
@@ -175,23 +178,35 @@ namespace AJ.Std.Collections
 		/// Returns BCD value of the structure using first byte as high
 		/// </summary>
 		public long HighFirstBcd =>
-			First.ToBcdInteger() * 100_000_000_000_000 + Second.ToBcdInteger() * 1_000_000_000_000 + Third.ToBcdInteger() * 10_000_000_000 + Fourth.ToBcdInteger() * 100_000_000 +
-			Fifth.ToBcdInteger() * 1_000_000 + Sixth.ToBcdInteger() * 10_000 + Seventh.ToBcdInteger() * 100 + Eighth.ToBcdInteger();
+			First.ToBcdInteger() * 100_000_000_000_000 +
+			Second.ToBcdInteger() * 1_000_000_000_000 +
+			Third.ToBcdInteger() * 10_000_000_000 +
+			Fourth.ToBcdInteger() * (long)100_000_000 +
+			Fifth.ToBcdInteger() * (long)1_000_000 +
+			Sixth.ToBcdInteger() * (long)10_000 +
+			Seventh.ToBcdInteger() * (long)100 +
+			Eighth.ToBcdInteger();
 
 		/// <summary>
 		/// Returns BCD value of the structure using first byte as low
 		/// </summary>
 		public long LowFirstBcd =>
-			Eighth.ToBcdInteger() * 100_000_000_000_000 + Seventh.ToBcdInteger() * 1_000_000_000_000 + Sixth.ToBcdInteger() * 10_000_000_000 + Fifth.ToBcdInteger() * 100_000_000 +
-			Fourth.ToBcdInteger() * 1_000_000 + Third.ToBcdInteger() * 10_000 + Second.ToBcdInteger() * 100 + First.ToBcdInteger();
+			Eighth.ToBcdInteger() * 100000000000000 +
+			Seventh.ToBcdInteger() * 1000000000000 +
+			Sixth.ToBcdInteger() * 10000000000 +
+			Fifth.ToBcdInteger() * (long)100000000 +
+			Fourth.ToBcdInteger() * (long)1000000 +
+			Third.ToBcdInteger() * (long)10000 +
+			Second.ToBcdInteger() * (long)100 +
+			First.ToBcdInteger();
 
 		/// <summary>
 		/// Creates structure from BCD value using first byte as high
 		/// </summary>
 		/// <param name="bcdValueHf">BCD value</param>
-		/// <returns>New octa</returns>
-		public static BytesOcta FromBcdHighFirst(long bcdValueHf) {
-			if (bcdValueHf < 0 || bcdValueHf > 9999_9999__9999_9999) throw new ArgumentOutOfRangeException(nameof(bcdValueHf), "must be in range [0-9999_9999__9999_9999]");
+		/// <returns>New octave</returns>
+		public static BytesOcta ToBcdHighFirst(long bcdValueHf) {
+			//if (bcdValueHf < 0 || bcdValueHf > 9999_9999__9999_9999) throw new ArgumentOutOfRangeException(nameof(bcdValueHf), "must be in range [0-9999_9999__9999_9999]");
 			long binHighFirst = 0;
 			for (int digit = 0; digit < 16; ++digit) {
 				long nibble = bcdValueHf % 10;
@@ -205,9 +220,9 @@ namespace AJ.Std.Collections
 		/// Creates structure from BCD value using first byte as low
 		/// </summary>
 		/// <param name="bcdValueLf">BCD value</param>
-		/// <returns>New octa</returns>
-		public static BytesOcta FromBcdLowFirst(long bcdValueLf) {
-			if (bcdValueLf < 0 || bcdValueLf > 9999_9999__9999_9999) throw new ArgumentOutOfRangeException(nameof(bcdValueLf), "must be in range [0-9999_9999__9999_9999]");
+		/// <returns>New octave</returns>
+		public static BytesOcta ToBcdLowFirst(long bcdValueLf) {
+			//if (bcdValueLf < 0 || bcdValueLf > 9999_9999__9999_9999) throw new ArgumentOutOfRangeException(nameof(bcdValueLf), "must be in range [0-9999_9999__9999_9999]");
 			long binLowFirst = 0;
 			for (int digit = 0; digit < 16; ++digit) {
 				long nibble = bcdValueLf % 10;
@@ -215,6 +230,10 @@ namespace AJ.Std.Collections
 				bcdValueLf /= 10;
 			}
 			return FromSignedLongLowFirst(binLowFirst);
+		}
+
+		public override string ToString() {
+			return First.ToString("X2") + " " + Second.ToString("X2") + " " + Third.ToString("X2") + " " + Fourth.ToString("X2") + " " + Fifth.ToString("X2") + " " + Sixth.ToString("X2") + " " + Seventh.ToString("X2") + " " + Eighth.ToString("X2");
 		}
 	}
 }
