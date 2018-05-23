@@ -138,19 +138,19 @@ namespace AJ.Std.Collections {
 		/// Возвращает BCD значение структуры  считая первый байт старшим
 		/// Returns value of structure as BCD value using first byte as high
 		/// </summary>
-		public int HighFirstBcd => First.ToBcdInteger() * 1000000 + Second.ToBcdInteger() * 10000 + Third.ToBcdInteger() * 100 + Fourth.ToBcdInteger();
+		public int HighFirstBcd => First.AsBcd() * 1000000 + Second.AsBcd() * 10000 + Third.AsBcd() * 100 + Fourth.AsBcd();
 
 		/// <summary>
 		/// Returns value of structure as BCD value using first byte as low
 		/// </summary>
-		public int LowFirstBcd => Fourth.ToBcdInteger() * 1000000 + Third.ToBcdInteger() * 10000 + Second.ToBcdInteger() * 100 + First.ToBcdInteger();
+		public int LowFirstBcd => Fourth.AsBcd() * 1000000 + Third.AsBcd() * 10000 + Second.AsBcd() * 100 + First.AsBcd();
 
 		/// <summary>
 		/// Creates structure from BCD and using first byte as high
 		/// </summary>
 		/// <param name="bcdValueHf">BCD value</param>
 		/// <returns>New structure instance</returns>
-		public static BytesQuad ToBcdHighFirst(int bcdValueHf) {
+		public static BytesQuad FromBcdHighFirst(int bcdValueHf) {
 			if (bcdValueHf < 0 || bcdValueHf > 99999999) throw new ArgumentOutOfRangeException(nameof(bcdValueHf), "Must be in range 0-99999999");
 			int bcd = 0;
 			for (int digit = 0; digit < 8; ++digit) {
@@ -166,7 +166,7 @@ namespace AJ.Std.Collections {
 		/// </summary>
 		/// <param name="bcdValueLf">BCD value</param>
 		/// <returns>New structure instance</returns>
-		public static BytesQuad ToBcdLowFirst(int bcdValueLf) {
+		public static BytesQuad FromBcdLowFirst(int bcdValueLf) {
 			if (bcdValueLf < 0 || bcdValueLf > 99999999) throw new ArgumentOutOfRangeException(nameof(bcdValueLf), "Must be in range 0-99999999");
 			int bcd = 0;
 			for (int digit = 0; digit < 8; ++digit) {

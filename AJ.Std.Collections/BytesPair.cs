@@ -117,7 +117,7 @@ namespace AJ.Std.Collections
 		/// </summary>
 		/// <param name="bcdValueHf">BCD value</param>
 		/// <returns>New structure instance</returns>
-		public static BytesPair ToBcdHighFirst(int bcdValueHf) {
+		public static BytesPair FromBcdHighFirst(int bcdValueHf) {
 			if (bcdValueHf < 0 || bcdValueHf > 9999) throw new ArgumentOutOfRangeException(nameof(bcdValueHf), "Must be in range 0-9999");
 			int bcd = 0;
 			for (int digit = 0; digit < 4; ++digit) {
@@ -133,7 +133,7 @@ namespace AJ.Std.Collections
 		/// </summary>
 		/// <param name="bcdValueLf">BCD value</param>
 		/// <returns>New structure instance</returns>
-		public static BytesPair ToBcdLowFirst(int bcdValueLf) {
+		public static BytesPair FromBcdLowFirst(int bcdValueLf) {
 			if (bcdValueLf < 0 || bcdValueLf > 9999) throw new ArgumentOutOfRangeException(nameof(bcdValueLf), "Must be in range 0-9999");
 			int bcd = 0;
 			for (int digit = 0; digit < 4; ++digit) {
@@ -156,7 +156,7 @@ namespace AJ.Std.Collections
 			return new BytesPair(first, second);
 		}
 
-		public int HighFirstBcd => First.ToBcdInteger() * 100 + Second.ToBcdInteger();
-		public int LowFirstBcd => Second.ToBcdInteger() * 100 + First.ToBcdInteger();
+		public int HighFirstBcd => First.AsBcd() * 100 + Second.AsBcd();
+		public int LowFirstBcd => Second.AsBcd() * 100 + First.AsBcd();
 	}
 }

@@ -178,34 +178,34 @@ namespace AJ.Std.Collections {
 		/// Returns BCD value of the structure using first byte as high
 		/// </summary>
 		public long HighFirstBcd =>
-			First.ToBcdInteger() * 100_000_000_000_000 +
-			Second.ToBcdInteger() * 1_000_000_000_000 +
-			Third.ToBcdInteger() * 10_000_000_000 +
-			Fourth.ToBcdInteger() * (long)100_000_000 +
-			Fifth.ToBcdInteger() * (long)1_000_000 +
-			Sixth.ToBcdInteger() * (long)10_000 +
-			Seventh.ToBcdInteger() * (long)100 +
-			Eighth.ToBcdInteger();
+			First.AsBcd() * 100_000_000_000_000 +
+			Second.AsBcd() * 1_000_000_000_000 +
+			Third.AsBcd() * 10_000_000_000 +
+			Fourth.AsBcd() * (long)100_000_000 +
+			Fifth.AsBcd() * (long)1_000_000 +
+			Sixth.AsBcd() * (long)10_000 +
+			Seventh.AsBcd() * (long)100 +
+			Eighth.AsBcd();
 
 		/// <summary>
 		/// Returns BCD value of the structure using first byte as low
 		/// </summary>
 		public long LowFirstBcd =>
-			Eighth.ToBcdInteger() * 100000000000000 +
-			Seventh.ToBcdInteger() * 1000000000000 +
-			Sixth.ToBcdInteger() * 10000000000 +
-			Fifth.ToBcdInteger() * (long)100000000 +
-			Fourth.ToBcdInteger() * (long)1000000 +
-			Third.ToBcdInteger() * (long)10000 +
-			Second.ToBcdInteger() * (long)100 +
-			First.ToBcdInteger();
+			Eighth.AsBcd() * 100000000000000 +
+			Seventh.AsBcd() * 1000000000000 +
+			Sixth.AsBcd() * 10000000000 +
+			Fifth.AsBcd() * (long)100000000 +
+			Fourth.AsBcd() * (long)1000000 +
+			Third.AsBcd() * (long)10000 +
+			Second.AsBcd() * (long)100 +
+			First.AsBcd();
 
 		/// <summary>
 		/// Creates structure from BCD value using first byte as high
 		/// </summary>
 		/// <param name="bcdValueHf">BCD value</param>
 		/// <returns>New octave</returns>
-		public static BytesOcta ToBcdHighFirst(long bcdValueHf) {
+		public static BytesOcta FromBcdHighFirst(long bcdValueHf) {
 			//if (bcdValueHf < 0 || bcdValueHf > 9999_9999__9999_9999) throw new ArgumentOutOfRangeException(nameof(bcdValueHf), "must be in range [0-9999_9999__9999_9999]");
 			long binHighFirst = 0;
 			for (int digit = 0; digit < 16; ++digit) {
@@ -221,7 +221,7 @@ namespace AJ.Std.Collections {
 		/// </summary>
 		/// <param name="bcdValueLf">BCD value</param>
 		/// <returns>New octave</returns>
-		public static BytesOcta ToBcdLowFirst(long bcdValueLf) {
+		public static BytesOcta FromBcdLowFirst(long bcdValueLf) {
 			//if (bcdValueLf < 0 || bcdValueLf > 9999_9999__9999_9999) throw new ArgumentOutOfRangeException(nameof(bcdValueLf), "must be in range [0-9999_9999__9999_9999]");
 			long binLowFirst = 0;
 			for (int digit = 0; digit < 16; ++digit) {
