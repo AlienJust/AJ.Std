@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO.Ports;
 using System.Threading;
 using AJ.Std.Text;
-using RJCP.IO.Ports;
 
 namespace AJ.Std.Serial
 {
 	public sealed class SerialPortExtender : ISerialPortExtender {
-		private readonly SerialPortStream _port;
+		private readonly SerialPort _port;
 		private readonly Action<string> _selectedLogAction;
 		private readonly Action<string> _errorLogAction;
 		private readonly Stopwatch _readEplasedTimer = new Stopwatch();
@@ -15,13 +15,13 @@ namespace AJ.Std.Serial
 		private static void EmptyLog(string s) {
 		}
 
-		public SerialPortExtender(SerialPortStream port) {
+		public SerialPortExtender(SerialPort port) {
 			_port = port;
 			_selectedLogAction = EmptyLog;
 			_errorLogAction = EmptyLog;
 		}
 
-		public SerialPortExtender(SerialPortStream port, Action<string> logAction, Action<string> errorLogAction) {
+		public SerialPortExtender(SerialPort port, Action<string> logAction, Action<string> errorLogAction) {
 			_port = port;
 			_selectedLogAction = logAction ?? throw new NullReferenceException(".ctor parameter logAction cannot be null");
 			_errorLogAction = errorLogAction ?? throw new NullReferenceException(".ctor parameter errorLogAction cannot be null");
