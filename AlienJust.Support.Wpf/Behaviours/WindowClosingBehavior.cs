@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 
-namespace AlienJust.Adaptation.WindowsPresentation.Behaviours {
+namespace AlienJust.Support.Wpf.Behaviours {
 	public class WindowClosingBehavior {
 		public static ICommand GetClosed(DependencyObject obj) {
 			return (ICommand) obj.GetValue(ClosedProperty);

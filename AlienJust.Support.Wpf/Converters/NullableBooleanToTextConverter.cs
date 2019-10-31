@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace AlienJust.Adaptation.WindowsPresentation.Converters {
+namespace AlienJust.Support.Wpf.Converters {
     public class NullableBooleanToTextConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

@@ -2,7 +2,7 @@
 using System.Windows.Threading;
 using AlienJust.Support.Concurrent.Contracts;
 
-namespace AlienJust.Adaptation.WindowsPresentation
+namespace AlienJust.Support.Wpf
 {
 	public sealed class WpfUiNotifierAsyncWithPriority : IThreadNotifier {
 		private readonly Dispatcher _dispatcher;

@@ -2,7 +2,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 
-namespace AlienJust.Adaptation.WindowsPresentation.Behaviours
+namespace AlienJust.Support.Wpf.Behaviours
 {
 	public static class InputBindingsManager {
 

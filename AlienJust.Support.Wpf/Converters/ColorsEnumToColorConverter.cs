@@ -2,7 +2,7 @@
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace AlienJust.Adaptation.WindowsPresentation.Converters
+namespace AlienJust.Support.Wpf.Converters
 {
 	[ValueConversion(typeof(Colors), typeof(Brush))]
 	public class ColorsEnumToColorConverter : IValueConverter

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Media;
 
-namespace AlienJust.Adaptation.WindowsPresentation.Converters
+namespace AlienJust.Support.Wpf.Converters
 {
 	static class ColorsConverter
 	{

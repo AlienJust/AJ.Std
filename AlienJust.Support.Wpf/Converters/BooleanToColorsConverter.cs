@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace AlienJust.Adaptation.WindowsPresentation.Converters
+namespace AlienJust.Support.Wpf.Converters
 {
     public class BooleanToColorsConverter : IValueConverter
     {

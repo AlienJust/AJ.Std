@@ -1,4 +1,4 @@
-namespace AlienJust.Adaptation.WindowsPresentation.Converters {
+namespace AlienJust.Support.Wpf.Converters {
 	public enum Colors {
 		Red,
 		Blue,

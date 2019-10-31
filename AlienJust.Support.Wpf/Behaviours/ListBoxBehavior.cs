@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace AlienJust.Adaptation.WindowsPresentation.Behaviours
+namespace AlienJust.Support.Wpf.Behaviours
 {
 	public class ListBoxBehavior {
 		static readonly Dictionary<ListBox, Capture> Associations =

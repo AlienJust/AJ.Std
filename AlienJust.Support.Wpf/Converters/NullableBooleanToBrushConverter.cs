@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace AlienJust.Adaptation.WindowsPresentation.Converters {
+namespace AlienJust.Support.Wpf.Converters {
     public sealed class NullableBooleanToBrushConverter : IValueConverter
     {
 

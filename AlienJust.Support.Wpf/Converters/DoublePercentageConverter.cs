@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Data;
 
-namespace AlienJust.Adaptation.WindowsPresentation.Converters {
+namespace AlienJust.Support.Wpf.Converters {
 	[ValueConversion(typeof(object), typeof(double))]
 	public class DoublePercentageConverter : IValueConverter
 	{
