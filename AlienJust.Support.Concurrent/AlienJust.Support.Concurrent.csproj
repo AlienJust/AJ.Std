@@ -2,5 +2,13 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netcoreapp3.1</TargetFrameworks>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Copyright>2019 Alexey Debelov</Copyright>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AlienJust.Support.Concurrent.Contracts" Version="1.0.0" />
+    <PackageReference Include="AlienJust.Support.Loggers.Contracts" Version="1.0.0" />
+  </ItemGroup>
 </Project>
