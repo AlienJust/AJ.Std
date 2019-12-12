@@ -2,20 +2,21 @@
 
 namespace AlienJust.Support.Composition
 {
-	public class CompositionPartWithInformationRelay : ICompositionPartWithInformation {
-		private readonly ICompositionPart _relayPart;
+    public class CompositionPartWithInformationRelay : ICompositionPartWithInformation
+    {
+        public CompositionPartWithInformationRelay(ICompositionPart relayPart)
+        {
+            CompositionPart = relayPart;
+            IsInitComplete = false;
+        }
 
-		public CompositionPartWithInformationRelay(ICompositionPart relayPart) {
-			_relayPart = relayPart;
-			IsInitComplete = false;
-		}
+        public void SetCompositionRoot(ICompositionRoot root)
+        {
+            CompositionPart.SetCompositionRoot(root);
+        }
 
-		public void SetCompositionRoot(ICompositionRoot root) {
-			_relayPart.SetCompositionRoot(root);
-		}
+        public bool IsInitComplete { get; set; }
 
-		public bool IsInitComplete { get; set; }
-
-		public ICompositionPart CompositionPart => _relayPart;
-	}
+        public ICompositionPart CompositionPart { get; private set; }
+    }
 }
