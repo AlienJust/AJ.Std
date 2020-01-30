@@ -1,121 +1,19 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{FB84D3F7-6E57-44C9-A891-A8079872FA0E}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AlienJust.Support.Wpf</RootNamespace>
-    <AssemblyName>AlienJust.Support.Wpf</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-    <Prefer32Bit>false</Prefer32Bit>
+    <TargetFrameworks>netcoreapp3.1;net4.8</TargetFrameworks>
+    <UseWPF>true</UseWPF>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Copyright>2020 Alexey Debelov</Copyright>
+    <Description>Some stuff for WPF</Description>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <Version>1.0.1</Version>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
+    <PackageReference Include="AlienJust.Support.Mvvm" Version="1.0.3" />
+    <PackageReference Include="AlienJust.Support.UI.Contracts" Version="1.0.3" />
+    <PackageReference Include="AlienJust.Support.Concurrent.Contracts" Version="1.0.3" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AttachedProperties.cs" />
-    <Compile Include="Behaviours\InputBindingsManager.cs" />
-    <Compile Include="Behaviours\ListBoxBehavior.cs" />
-    <Compile Include="Converters\BooleanToBrushConverter.cs" />
-    <Compile Include="Converters\BooleanToColorsConverter.cs" />
-    <Compile Include="Converters\BooleanToTextConverter.cs" />
-    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Converters\Colors.cs" />
-    <Compile Include="Converters\ColorsConverter.cs" />
-    <Compile Include="Converters\ColorsEnumToBrushConverter.cs" />
-    <Compile Include="Converters\DoubleAdditiveConverter.cs" />
-    <Compile Include="Converters\DoublePercentageConverter.cs" />
-    <Compile Include="Converters\ColorsEnumToColorConverter.cs" />
-    <Compile Include="Converters\NullableBooleanToBrushConverter.cs" />
-    <Compile Include="Converters\NullableBooleanToColorsConverter.cs" />
-    <Compile Include="Converters\NullableBooleanToTextConverter.cs" />
-    <Compile Include="Converters\TextToBrushConverter.cs" />
-    <Compile Include="Converters\UintToBrushConverter.cs" />
-    <Compile Include="DpiDecorator.cs" />
-    <Compile Include="ViewModelAdvanced.cs" />
-    <Compile Include="Behaviours\WindowClosingBehavior.cs" />
-    <Compile Include="WpfUiNotifier.cs" />
-    <Compile Include="WpfUiNotifierAsync.cs" />
-    <Compile Include="WpfUiNotifierAsyncWithPriority.cs" />
-    <Compile Include="WpfWindowSystem.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AlienJust.Support.Concurrent.Contracts\AlienJust.Support.Concurrent.Contracts.csproj">
-      <Project>{0ca1e7af-6f4e-4465-9689-b9461e924f12}</Project>
-      <Name>AlienJust.Support.Concurrent.Contracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AlienJust.Support.Mvvm\AlienJust.Support.Mvvm.csproj">
-      <Project>{9ac87474-8775-4ce9-8e45-a624eeb72d4c}</Project>
-      <Name>AlienJust.Support.Mvvm</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AlienJust.Support.UI.Contracts\AlienJust.Support.UI.Contracts.csproj">
-      <Project>{e7a35b80-cc8b-4948-adf2-c28151155d4b}</Project>
-      <Name>AlienJust.Support.UI.Contracts</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>
