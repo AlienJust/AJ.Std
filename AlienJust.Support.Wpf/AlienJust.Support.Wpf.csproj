@@ -4,11 +4,11 @@
     <TargetFrameworks>netcoreapp3.1;net4.8</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <Copyright>2020 Alexey Debelov</Copyright>
     <Description>Some stuff for WPF</Description>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <Version>1.0.1</Version>
-    <AssemblyVersion>1.0.1.0</AssemblyVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AlienJust.Support.Mvvm" Version="1.0.3" />
