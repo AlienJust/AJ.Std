@@ -6,9 +6,9 @@
   
   <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Copyright>2019 Alexey Debelov</Copyright>
+    <Copyright>2020 Alexey Debelov</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <Description>Bit operations, CRC calcullation, etc</Description>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
   </PropertyGroup>
 </Project>
