@@ -318,6 +318,8 @@ namespace AlienJust.Support.Numeric
             for (int i = startByte; i < startByte + length; ++i)
             {
                 byte b = data[i];
+
+
                 for (int j = 8; j > 0; j--)
                 {
                     if (((b ^ crc) & 0x01) != 0) 
@@ -328,7 +330,6 @@ namespace AlienJust.Support.Numeric
                     {
                         crc >>= 1;
                     }
-
                     b >>= 1;
                 }
             }
