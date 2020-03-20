@@ -311,10 +311,49 @@ namespace AlienJust.Support.Numeric
             return crc;
         }
 
+        /// <summary>
+        /// Gives result as in GetCrc8FromArrayRoman method
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="startByte"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
         public static byte GetCrc8Base(byte[] data, int startByte, int length)
         {
             const byte CrcBase = 0x18;
             byte crc = 0;
+            for (int i = startByte; i < startByte + length; ++i)
+            {
+                byte b = data[i];
+
+
+                for (int j = 8; j > 0; j--)
+                {
+                    if (((b ^ crc) & 0x01) != 0) 
+                    {
+                        crc = (byte)(((crc ^ CrcBase) >> 1) | 0x80);
+                    }
+                    else 
+                    {
+                        crc >>= 1;
+                    }
+                    b >>= 1;
+                }
+            }
+            return crc;
+        }
+
+        /// <summary>
+        /// Like GetCrc8Base, but crc value is inited as 0xFF
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="startByte"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static byte GetCrc8BaseFF(byte[] data, int startByte, int length)
+        {
+            const byte CrcBase = 0x18;
+            byte crc = 0xFF;
             for (int i = startByte; i < startByte + length; ++i)
             {
                 byte b = data[i];
