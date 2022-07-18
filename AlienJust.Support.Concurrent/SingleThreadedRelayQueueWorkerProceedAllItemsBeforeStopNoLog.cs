@@ -76,9 +76,8 @@ namespace AlienJust.Support.Concurrent
                             continue;
                         }
                     }
-                    _threadNotifyAboutQueueItemsCountChanged.WaitOne();
-
                     if (MustBeStopped) throw new Exception("MustBeStopped is true, this is the end of thread");
+                    _threadNotifyAboutQueueItemsCountChanged.WaitOne();
                 }
             }
             catch
