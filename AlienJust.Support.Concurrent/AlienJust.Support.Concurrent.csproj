@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AlienJust.Support.Concurrent.Contracts" Version="1.0.1" />
-    <PackageReference Include="AlienJust.Support.Loggers.Contracts" Version="1.0.1" />
+    <PackageReference Include="AlienJust.Support.Concurrent.Contracts" Version="1.0.3" />
+    <PackageReference Include="AlienJust.Support.Loggers.Contracts" Version="1.0.3" />
   </ItemGroup>
 </Project>
