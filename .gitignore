@@ -260,3 +260,7 @@ paket-files/
 __pycache__/
 *.pyc
 /.vscode/launch.json
+
+
+# nix direnv
+.direnv
