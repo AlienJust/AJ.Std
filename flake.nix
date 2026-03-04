@@ -1,7 +1,7 @@
 {
   description = "A Nix-flake-based C# development environment";
 
-  inputs.nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1.*.tar.gz";
+  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable"; # "https://flakehub.com/f/NixOS/nixpkgs/0.1.*.tar.gz";
 
   outputs = {
     self,
@@ -19,10 +19,17 @@
         packages = with pkgs; [
           #dotnet-sdk_6
           #dotnet-sdk_7
-          dotnet-sdk_8
-          omnisharp-roslyn
+          #dotnet-sdk_8
+          (with dotnetCorePackages;
+            combinePackages [
+              #sdk_6_0
+              #sdk_7_0
+              sdk_8_0
+              sdk_10_0
+            ])
+          #omnisharp-roslyn
           mono
-          msbuild
+          #msbuild
         ];
       };
     });
